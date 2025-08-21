@@ -1,0 +1,32 @@
+# Ignore target directory
+target/
+
+# Ignore IDE files
+.idea/
+*.iml
+.vscode/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore git
+.git/
+.gitignore
+
+# Ignore logs
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore node modules (if any)
+node_modules/
+
+# Ignore test files
+src/test/
+
+# Ignore documentation
+README.md
+docs/

@@ -1,0 +1,8 @@
+[phases.build]
+cmds = ["mvn clean package -DskipTests"]
+
+[phases.start]
+cmd = "java -Dserver.port=$PORT -jar target/BrainBuddy-0.0.1-SNAPSHOT.jar"
+
+[variables]
+SPRING_PROFILES_ACTIVE = "prod"
