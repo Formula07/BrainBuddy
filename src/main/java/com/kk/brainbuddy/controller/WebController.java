@@ -11,6 +11,11 @@ public class WebController {
     
     @GetMapping("/")
     public String index() {
+        return "forward:/login.html";
+    }
+    
+    @GetMapping("/app")
+    public String app() {
         return "forward:/index.html";
     }
 }

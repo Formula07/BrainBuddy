@@ -1,30 +1,38 @@
 package com.kk.brainbuddy.service;
 
+import com.kk.brainbuddy.dto.UserLoginDTO;
+import com.kk.brainbuddy.dto.UserRegistrationDTO;
 import com.kk.brainbuddy.entity.User;
-import com.kk.brainbuddy.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
-@Service
-public class UserService {
+import java.util.Optional;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
-    public User createUser(User user) {
-        return userRepository.save(user);
-    }
-
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
+/**
+ * Service interface for user management
+ */
+public interface UserService {
+    
+    /**
+     * Register a new user
+     */
+    User registerUser(UserRegistrationDTO registrationDTO);
+    
+    /**
+     * Authenticate user login
+     */
+    Optional<User> authenticateUser(UserLoginDTO loginDTO);
+    
+    /**
+     * Check if email already exists
+     */
+    boolean emailExists(String email);
+    
+    /**
+     * Get user by ID
+     */
+    Optional<User> getUserById(Long id);
+    
+    /**
+     * Get user by email
+     */
+    Optional<User> getUserByEmail(String email);
 }

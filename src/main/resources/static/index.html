@@ -9,22 +9,21 @@
 <body>
     <div class="container">
         <header>
-            <h1>🧠 BrainBuddy</h1>
-            <p>Find your perfect study partner!</p>
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>🧠 BrainBuddy</h1>
+                    <p>Find your perfect study partner!</p>
+                </div>
+                <div class="header-right">
+                    <div id="userInfo" class="user-info">
+                        <span>Welcome, <strong id="userName">User</strong>!</span>
+                        <button id="logoutBtn" class="logout-btn">Logout</button>
+                    </div>
+                </div>
+            </div>
         </header>
 
         <div class="app-content">
-            <!-- User Selection -->
-            <div class="user-selector">
-                <label for="currentUser">Select Your Profile:</label>
-                <select id="currentUser">
-                    <option value="">Choose a user...</option>
-                    <option value="1">John Doe</option>
-                    <option value="2">Jane Smith</option>
-                    <option value="3">Bob Wilson</option>
-                    <option value="4">Alice Brown</option>
-                </select>
-            </div>
 
             <!-- Main Swipe Card -->
             <div id="swipeSection" class="swipe-section" style="display: none;">

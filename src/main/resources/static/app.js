@@ -1,17 +1,36 @@
 // BrainBuddy Frontend Application
 class BrainBuddyApp {
     constructor() {
-        this.currentUserId = null;
+        this.currentUser = null;
         this.currentProfile = null;
         this.apiBase = 'http://localhost:8080/api';
-        
+
+        // Check authentication first
+        if (!this.checkAuth()) {
+            return;
+        }
+
         this.initializeElements();
         this.attachEventListeners();
+        this.initializeApp();
+    }
+
+    checkAuth() {
+        const userData = localStorage.getItem('currentUser');
+        if (!userData) {
+            window.location.href = 'login.html';
+            return false;
+        }
+
+        this.currentUser = JSON.parse(userData);
+        return true;
     }
 
     initializeElements() {
         // Get DOM elements
-        this.userSelector = document.getElementById('currentUser');
+        this.userInfo = document.getElementById('userInfo');
+        this.userName = document.getElementById('userName');
+        this.logoutBtn = document.getElementById('logoutBtn');
         this.swipeSection = document.getElementById('swipeSection');
         this.matchesSection = document.getElementById('matchesSection');
         this.profileCard = document.getElementById('profileCard');
@@ -33,7 +52,7 @@ class BrainBuddyApp {
     }
 
     attachEventListeners() {
-        this.userSelector.addEventListener('change', (e) => this.selectUser(e.target.value));
+        this.logoutBtn.addEventListener('click', () => this.logout());
         this.passBtn.addEventListener('click', () => this.swipe(false));
         this.likeBtn.addEventListener('click', () => this.swipe(true));
         this.continueBtn.addEventListener('click', () => this.hideMatchNotification());
@@ -42,39 +61,43 @@ class BrainBuddyApp {
         this.retryBtn.addEventListener('click', () => this.loadNextProfile());
     }
 
-    async selectUser(userId) {
-        if (!userId) {
-            this.hideAllSections();
-            return;
-        }
+    initializeApp() {
+        // Display user info
+        this.userName.textContent = this.currentUser.name;
 
-        this.currentUserId = userId;
+        // Start with swipe section
         this.showSwipeSection();
-        await this.loadNextProfile();
+        this.loadNextProfile();
+    }
+
+    logout() {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('authToken');
+        window.location.href = 'login.html';
     }
 
     async loadNextProfile() {
-        if (!this.currentUserId) return;
+        if (!this.currentUser) return;
 
         this.showLoading();
-        
+
         try {
-            const response = await fetch(`${this.apiBase}/swipes/potential/${this.currentUserId}`);
-            
+            const response = await fetch(`${this.apiBase}/swipes/potential/${this.currentUser.id}`);
+
             if (response.status === 404) {
                 this.showNoMoreProfiles();
                 return;
             }
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             const profile = await response.json();
             this.currentProfile = profile;
             this.displayProfile(profile);
             this.hideLoading();
-            
+
         } catch (error) {
             console.error('Error loading profile:', error);
             this.showError('Failed to load next profile. Please try again.');
@@ -88,7 +111,7 @@ class BrainBuddyApp {
     }
 
     async swipe(liked) {
-        if (!this.currentProfile || !this.currentUserId) return;
+        if (!this.currentProfile || !this.currentUser) return;
 
         this.showLoading();
 
@@ -99,7 +122,7 @@ class BrainBuddyApp {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    swiperId: parseInt(this.currentUserId),
+                    swiperId: this.currentUser.id,
                     targetId: this.currentProfile.id,
                     liked: liked
                 })
@@ -110,7 +133,7 @@ class BrainBuddyApp {
             }
 
             const result = await response.json();
-            
+
             if (result.success) {
                 if (result.isMatch) {
                     this.showMatchNotification(this.currentProfile.name);
@@ -120,7 +143,7 @@ class BrainBuddyApp {
             } else {
                 this.showError(result.message || 'Failed to record swipe');
             }
-            
+
         } catch (error) {
             console.error('Error recording swipe:', error);
             this.showError('Failed to record swipe. Please try again.');
@@ -128,23 +151,23 @@ class BrainBuddyApp {
     }
 
     async showMatches() {
-        if (!this.currentUserId) return;
+        if (!this.currentUser) return;
 
         this.hideAllSections();
         this.matchesSection.style.display = 'block';
         this.showLoading();
 
         try {
-            const response = await fetch(`${this.apiBase}/matches/user/${this.currentUserId}`);
-            
+            const response = await fetch(`${this.apiBase}/matches/user/${this.currentUser.id}`);
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             const matches = await response.json();
             this.displayMatches(matches);
             this.hideLoading();
-            
+
         } catch (error) {
             console.error('Error loading matches:', error);
             this.showError('Failed to load matches. Please try again.');
@@ -153,7 +176,7 @@ class BrainBuddyApp {
 
     displayMatches(matches) {
         this.matchesList.innerHTML = '';
-        
+
         if (matches.length === 0) {
             this.matchesList.innerHTML = '<p style="text-align: center; color: #666;">No matches yet. Keep swiping!</p>';
             return;
@@ -162,9 +185,9 @@ class BrainBuddyApp {
         matches.forEach(match => {
             const matchElement = document.createElement('div');
             matchElement.className = 'match-item';
-            
+
             const matchDate = new Date(match.matchedAt).toLocaleDateString();
-            
+
             matchElement.innerHTML = `
                 <div>
                     <h3>${match.matchedUser.name}</h3>
@@ -172,7 +195,7 @@ class BrainBuddyApp {
                 </div>
                 <div class="match-date">${matchDate}</div>
             `;
-            
+
             this.matchesList.appendChild(matchElement);
         });
     }

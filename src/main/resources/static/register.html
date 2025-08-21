@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainBuddy - Register</title>
+    <link rel="stylesheet" href="auth-styles.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>🧠 BrainBuddy</h1>
+                <p>Join our community of study partners!</p>
+            </div>
+
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required minlength="2" maxlength="50">
+                    <span class="error-message" id="nameError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                    <span class="error-message" id="emailError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required minlength="6">
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Bio (Optional)</label>
+                    <textarea id="bio" name="bio" rows="3" maxlength="500" placeholder="Tell others about your study interests..."></textarea>
+                    <span class="error-message" id="bioError"></span>
+                    <small class="char-count">0/500 characters</small>
+                </div>
+
+                <button type="submit" class="auth-btn" id="registerBtn">
+                    <span class="btn-text">Create Account</span>
+                    <div class="btn-spinner" style="display: none;"></div>
+                </button>
+
+                <div class="error-message" id="generalError"></div>
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Sign in here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Initialize register functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            new AuthManager('register');
+        });
+    </script>
+</body>
+</html>
