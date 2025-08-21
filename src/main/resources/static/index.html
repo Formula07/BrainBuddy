@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainBuddy - Study Partner Matching</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 BrainBuddy</h1>
+            <p>Find your perfect study partner!</p>
+        </header>
+
+        <div class="app-content">
+            <!-- User Selection -->
+            <div class="user-selector">
+                <label for="currentUser">Select Your Profile:</label>
+                <select id="currentUser">
+                    <option value="">Choose a user...</option>
+                    <option value="1">John Doe</option>
+                    <option value="2">Jane Smith</option>
+                    <option value="3">Bob Wilson</option>
+                    <option value="4">Alice Brown</option>
+                </select>
+            </div>
+
+            <!-- Main Swipe Card -->
+            <div id="swipeSection" class="swipe-section" style="display: none;">
+                <div class="card-container">
+                    <div id="profileCard" class="profile-card">
+                        <div class="card-content">
+                            <h2 id="profileName">Loading...</h2>
+                            <p id="profileBio">Loading bio...</p>
+                        </div>
+                        <div class="card-actions">
+                            <button id="passBtn" class="btn btn-pass">👎 Pass</button>
+                            <button id="likeBtn" class="btn btn-like">💖 Like</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="matchNotification" class="match-notification" style="display: none;">
+                    <div class="match-content">
+                        <h2>🎉 It's a Match!</h2>
+                        <p>You and <span id="matchedUserName"></span> liked each other!</p>
+                        <button id="continueBtn" class="btn btn-primary">Continue Swiping</button>
+                    </div>
+                </div>
+
+                <div id="noMoreProfiles" class="no-more-profiles" style="display: none;">
+                    <h2>🎯 No More Profiles</h2>
+                    <p>You've seen all available study partners!</p>
+                    <button id="viewMatchesBtn" class="btn btn-primary">View Your Matches</button>
+                </div>
+            </div>
+
+            <!-- Matches Section -->
+            <div id="matchesSection" class="matches-section" style="display: none;">
+                <h2>Your Matches 💕</h2>
+                <div id="matchesList" class="matches-list">
+                    <!-- Matches will be loaded here -->
+                </div>
+                <button id="backToSwipeBtn" class="btn btn-secondary">Back to Swiping</button>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="error-message" style="display: none;">
+                <p id="errorText">Something went wrong!</p>
+                <button id="retryBtn" class="btn btn-secondary">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
